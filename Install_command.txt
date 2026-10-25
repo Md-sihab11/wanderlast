@@ -1,0 +1,3 @@
+npx shadcn@latest init (Project cration)
+npx shadcn@latest add (for all the components)
+npx shadcn@latest add card

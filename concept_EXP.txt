@@ -1,0 +1,76 @@
+একটা বাস্তব উদাহরণ ভাবো: তুমি একটি বাড়ি তৈরি করছ।
+- page.tsx হলো বাড়ির মূল ঘরগুলোর layout।
+- components/ui/ হলো দরজা, জানালা, আসবাবপত্রের মতো reusable জিনিস।
+- globals.css হলো পুরো বাড়ির রং ও সাজসজ্জার নিয়ম।
+- layout.tsx হলো পুরো বাড়ির common কাঠামো।
+- lib/ হলো প্রয়োজনীয় ছোট ছোট helper বা কাজের সরঞ্জাম।
+
+B. node_modules/
+কাজ: Project-এর প্রয়োজনীয় package ও library রাখা।
+
+ধরো, তুমি একটি website বানাবে। তোমাকে সবকিছু শূন্য থেকে বানাতে হবে না। অন্য developer-দের তৈরি করা অনেক package ব্যবহার করতে পারো।
+
+যেমন:
+- React
+- Next.js
+- TypeScript
+- অন্যান্য installed package
+এই package-গুলোর code সাধারণত node_modules/-এর মধ্যে থাকে।
+
+মনে রাখবে: package.json বলে কোন package দরকার, আর node_modules/-এ সেই package-গুলোর installed code থাকে।
+
+৬. Root-level file-গুলোর কাজ
+এবার src/-এর বাইরের file-গুলো বুঝি।
+package.json
+
+Project-এর নাম, scripts এবং dependencies-এর তথ্য রাখে।
+
+উদাহরণস্বরূপ, npm run dev চালানোর জন্য প্রয়োজনীয় script এখানে থাকতে পারে।
+
+
+
+package-lock.json
+
+npm দিয়ে install করা dependency-গুলোর নির্দিষ্ট version ও dependency tree সংরক্ষণ করে, যাতে installation আরও consistent হয়।
+
+
+
+tsconfig.json
+
+TypeScript compiler-এর configuration নির্ধারণ করে। যেমন type-checking এবং কোন ধরনের JavaScript output তৈরি হবে, তার নিয়ম।
+
+
+
+eslint.config.mjs
+
+ESLint-এর configuration। Code-এর সম্ভাব্য সমস্যা, ভুল pattern এবং coding rule পরীক্ষা করতে সাহায্য করে।
+
+
+
+next.config.ts
+
+Next.js-এর configuration রাখে। যেমন কিছু build বা framework option।
+
+
+
+README.md
+
+Project সম্পর্কে documentation, setup instructions এবং ব্যবহারবিধি রাখার জায়গা।
+
+
+
+.gitignore
+
+Git-কে কোন file বা folder track না করতে হবে, তা বলে। যেমন node_modules/ বা generated file।
+
+
+
+next-env.d.ts
+
+Next.js ও TypeScript-এর জন্য প্রয়োজনীয় generated type declaration reference রাখে। সাধারণত নিজে edit করতে হয় না।
+
+
+
+concept_EXP.txt ও Install_command.txt
+
+নাম দেখে মনে হচ্ছে এগুলো project-এর concept বা installation command-এর notes। কিন্তু ভিতরের content না দেখে সঠিক কাজ নিশ্চিত করা যাবে না।
