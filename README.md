@@ -1,4 +1,4 @@
-# Wanderlust 🌍
+# Wanderlast 🌍
 
 > Discover, explore, and book your next unforgettable journey.
 
