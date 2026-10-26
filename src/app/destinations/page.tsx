@@ -17,14 +17,11 @@ import Link from "next/link";
 
 
 
-const API_URL = "http://localhost:8000/destinations";
+const API_URL = `http://${process.env.NEXT_PUBLIC_API_URL}/destinations`;
 
 const AllDestinationPage = () => {
     const [destinations, setDestinations] = useState<Destination[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedDestination, setSelectedDestination] =
-        useState<Destination | null>(null);
-    const [guests, setGuests] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 

@@ -39,7 +39,7 @@ type StatsData = {
   averagePrice: number;
 };
 
-const STATS_API_URL = "http://localhost:8000/stats";
+const STATS_API_URL = `http://${process.env.NEXT_PUBLIC_API_URL}/stats`;
 
 const statDefinitions = [
   {
