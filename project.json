@@ -1,0 +1,21 @@
+{
+  "slug": "wanderlust",
+  "title": "Wanderlust",
+  "tagline": "Discover, explore, and book your next unforgettable journey.",
+  "description": "A modern travel and destination listing web app that lets users browse stunning places, read details, manage bookings, and plan trips with ease. Built with Next.js 16, Tailwind CSS v4, shadcn UI, and MongoDB-backed auth via better-auth.",
+  "problem": "Travelers need a fast, beautiful, and responsive platform to discover destinations, view details, manage bookings, and submit new listings — all while maintaining a clean user interface and real-time data validation.",
+  "solution": "Built with Next.js 16 App Router for smooth navigation, Tailwind CSS v4 for a responsive design, shadcn/Base UI for accessible components, and integrated MongoDB auth for secure user accounts. Includes booking management, profile pages, password recovery, and destination submission flows.",
+  "image": "/images/projects/wanderlust.png",
+  "imageAlt": "Wanderlust travel destination listing interface",
+  "technologies": ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS v4", "shadcn / Base UI", "better-auth", "MongoDB", "Turbopack"],
+  "featured": true,
+  "category": "Next.js",
+  "highlights": [
+    "Next.js 16 App Router with partial prefetching and cache components",
+    "Tailwind CSS v4 CSS-first theming in globals.css (no config file needed)",
+    "40+ shadcn UI components (accordion, dialog, carousel, calendar, etc.)",
+    "Secure authentication with better-auth and MongoDB adapter",
+    "Destination browsing, detail pages, bookings, profile, and add-destination flows",
+    "Responsive design optimized for all screen sizes"
+  ]
+}

@@ -140,21 +140,37 @@ export type BookingStats = {
   confirmed: number;
   pending: number;
   totalSpent: number;
+  countriesVisited: number;
+  upcomingTrips: number;
 };
 
-/** Summary of the stored bookings, used by the profile statistics. */
+/**
+ * Summary of the stored bookings, used by the profile statistics.
+ * Only Confirmed trips are counted — pending bookings are excluded.
+ */
 export function getBookingStats(bookings: Booking[]): BookingStats {
   let confirmed = 0;
   let pending = 0;
   let totalSpent = 0;
+  let upcomingTrips = 0;
+
+  const countries = new Set<string>();
+  const today = new Date().toISOString().slice(0, 10);
 
   for (const booking of bookings) {
-    if (booking.status === "Confirmed") {
-      confirmed += 1;
-      totalSpent += Number(booking.price) || 0;
-    } else {
+    if (booking.status !== "Confirmed") {
       pending += 1;
+      continue;
     }
+
+    confirmed += 1;
+    totalSpent += Number(booking.price) || 0;
+
+    const country = booking.country.trim().toLowerCase();
+    if (country) countries.add(country);
+
+    const departure = booking.departureDate.slice(0, 10);
+    if (departure && departure >= today) upcomingTrips += 1;
   }
 
   return {
@@ -162,5 +178,7 @@ export function getBookingStats(bookings: Booking[]): BookingStats {
     confirmed,
     pending,
     totalSpent,
+    countriesVisited: countries.size,
+    upcomingTrips,
   };
 }

@@ -4,18 +4,14 @@ import Image from "next/image";
 import { useEffect, useState, useSyncExternalStore, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import {
-  BadgeCheck,
   Camera,
   Check,
-  Clock3,
   DollarSign,
   Globe,
-  Luggage,
   Mail,
   Pencil,
   Plane,
   TrendingUp,
-  Wallet,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -32,65 +28,30 @@ import {
   type BookingStats,
 } from "@/lib/bookings";
 
-type StatsData = {
-  totalDestinations: number;
-  countriesCovered: number;
-  upcomingDepartures: number;
-  averagePrice: number;
-};
-
-const STATS_API_URL = `${process.env.NEXT_PUBLIC_API_URL}/stats`;
-
+/** Stats of the signed-in traveller — built from their own bookings. */
 const statDefinitions = [
   {
-    label: "Total Destinations",
+    label: "Total Bookings",
     icon: Plane,
     tone: "text-cyan-600 bg-cyan-100",
-    format: (stats: StatsData) => stats.totalDestinations.toLocaleString("en-US"),
-  },
-  {
-    label: "Countries Covered",
-    icon: Globe,
-    tone: "text-emerald-600 bg-emerald-100",
-    format: (stats: StatsData) => stats.countriesCovered.toLocaleString("en-US"),
-  },
-  {
-    label: "Upcoming Departures",
-    icon: TrendingUp,
-    tone: "text-orange-500 bg-orange-100",
-    format: (stats: StatsData) => stats.upcomingDepartures.toLocaleString("en-US"),
-  },
-  {
-    label: "Average Price",
-    icon: DollarSign,
-    tone: "text-pink-600 bg-pink-100",
-    format: (stats: StatsData) => `$${stats.averagePrice.toLocaleString("en-US")}`,
-  },
-] as const;
-
-const bookingStatDefinitions = [
-  {
-    label: "Confirmed Trips",
-    icon: BadgeCheck,
-    tone: "text-green-600 bg-green-100",
     format: (stats: BookingStats) => stats.confirmed.toLocaleString("en-US"),
   },
   {
-    label: "Pending Trips",
-    icon: Clock3,
-    tone: "text-amber-500 bg-amber-100",
-    format: (stats: BookingStats) => stats.pending.toLocaleString("en-US"),
+    label: "Countries Visited",
+    icon: Globe,
+    tone: "text-emerald-600 bg-emerald-100",
+    format: (stats: BookingStats) => stats.countriesVisited.toLocaleString("en-US"),
   },
   {
-    label: "Trips Booked",
-    icon: Luggage,
-    tone: "text-sky-600 bg-sky-100",
-    format: (stats: BookingStats) => stats.total.toLocaleString("en-US"),
+    label: "Upcoming Trips",
+    icon: TrendingUp,
+    tone: "text-orange-500 bg-orange-100",
+    format: (stats: BookingStats) => stats.upcomingTrips.toLocaleString("en-US"),
   },
   {
     label: "Total Spent",
-    icon: Wallet,
-    tone: "text-violet-600 bg-violet-100",
+    icon: DollarSign,
+    tone: "text-pink-600 bg-pink-100",
     format: (stats: BookingStats) =>
       `$${stats.totalSpent.toLocaleString("en-US")}`,
   },
@@ -158,56 +119,12 @@ export default function ProfilePage() {
 
   const signedOut = !isPending && !user;
 
-  const [stats, setStats] = useState<StatsData | null>(null);
-  const [statsFailed, setStatsFailed] = useState(false);
-  const [statsRequest, setStatsRequest] = useState(0);
-
   const bookings = useSyncExternalStore(
     subscribeBookings,
     getBookingsSnapshot,
     getServerBookingsSnapshot
   );
   const bookingStats = getBookingStats(bookings);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadStats() {
-      try {
-        const response = await fetch(STATS_API_URL);
-        if (!response.ok) {
-          throw new Error(`Request failed with status ${response.status}`);
-        }
-
-        const data = (await response.json()) as Partial<StatsData>;
-        if (cancelled) return;
-
-        setStats({
-          totalDestinations: Number(data.totalDestinations) || 0,
-          countriesCovered: Number(data.countriesCovered) || 0,
-          upcomingDepartures: Number(data.upcomingDepartures) || 0,
-          averagePrice: Number(data.averagePrice) || 0,
-        });
-        setStatsFailed(false);
-      } catch {
-        if (!cancelled) {
-          setStatsFailed(true);
-        }
-      }
-    }
-
-    void loadStats();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [statsRequest]);
-
-  const retryStats = () => {
-    setStats(null);
-    setStatsFailed(false);
-    setStatsRequest((request) => request + 1);
-  };
 
   useEffect(() => {
     if (signedOut) {
@@ -397,59 +314,16 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
 
-        {/* Travel statistics */}
+        {/* Travel statistics — confirmed bookings only */}
         <section>
           <h2 className="text-lg font-semibold">Travel Statistics</h2>
-
-          {statsFailed && (
-            <Card className="mt-4 shadow-none ring-border/70!">
-              <CardContent className="flex flex-col items-start gap-3">
-                <p className="text-sm text-muted-foreground">
-                  Could not load travel statistics. Make sure the API server is
-                  running on port 8000.
-                </p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={retryStats}
-                >
-                  Try again
-                </Button>
-              </CardContent>
-            </Card>
-          )}
+          <p className="mt-1 text-sm text-muted-foreground">
+            Counted from your confirmed bookings — pending trips
+            aren&apos;t included yet.
+          </p>
 
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            {!statsFailed &&
-              statDefinitions.map((stat) => (
-                <Card
-                  key={stat.label}
-                  className="py-5 shadow-none ring-border/70!"
-                >
-                  <CardContent className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        {stat.label}
-                      </p>
-                      {stats ? (
-                        <p className="mt-2 text-2xl font-semibold">
-                          {stat.format(stats)}
-                        </p>
-                      ) : (
-                        <Skeleton className="mt-2 h-7 w-16" />
-                      )}
-                    </div>
-                    <span
-                      className={`grid size-10 shrink-0 place-items-center rounded-full ${stat.tone}`}
-                    >
-                      <stat.icon className="size-5" />
-                    </span>
-                  </CardContent>
-                </Card>
-              ))}
-
-            {bookingStatDefinitions.map((stat) => (
+            {statDefinitions.map((stat) => (
               <Card
                 key={stat.label}
                 className="py-5 shadow-none ring-border/70!"
