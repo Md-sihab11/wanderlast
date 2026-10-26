@@ -52,7 +52,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-const API_URL = `http://${process.env.NEXT_PUBLIC_API_URL}/destinations`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/destinations`;
 
 const categories = [
   "Beach",
