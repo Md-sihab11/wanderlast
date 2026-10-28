@@ -32,6 +32,8 @@ const AllDestinationPage = () => {
         const fetchDestinations = async () => {
             try {
                 const res = await fetch(API_URL, {
+                    headers: { authorization: 'user logged in' }
+                    ,
                     signal: controller.signal,
                 });
 
