@@ -102,7 +102,11 @@ function unwrapDestination(payload: unknown): Destination | null {
 }
 
 async function fetchDestinationById(id: string): Promise<Destination> {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await fetch(`${API_URL}/${id}`, {
+    headers: {
+      authorization: "user logged in"
+    },
+  });
 
   const payload: unknown = await response.json();
   const result = unwrapDestination(payload);
